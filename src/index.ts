@@ -1,11 +1,9 @@
-import * as configDotenv from 'dotenv';
+import 'dotenv/config';
 import path from 'path';
 import { DatabaseService } from './services/mongo.service.js';
 import { ExcelService } from './services/excel.service.js';
 import { EmailService } from './services/email.service.js';
 import { transformContractData } from './utils/report.transformer.js';
-
-configDotenv.config();
 
 async function main(){
   // validate enviroment

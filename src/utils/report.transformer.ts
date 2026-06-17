@@ -2,7 +2,17 @@ import type { BiWeeklyReportData, DealershipBreakdown, ContractProductType, RawC
 // This file Organizes and transforms raw contract data from MongoDB into the structured format needed for the Excel report. 
 //It aggregates counts and costs by dealership and product, while also preparing a raw list of contracts for the second tab of the report.
 
-export function transformContractData(contracts: any[]): BiWeeklyReportData {
+interface MongoContract {
+  _id?: { toString(): string };
+  metadata?: {
+    DealerName?: string;
+    CoverageName?: string;
+    NetCost?: string | number;
+    'Contract#'?: string;
+  };
+}
+
+export function transformContractData(contracts: MongoContract[]): BiWeeklyReportData {
   const dealerMap = new Map<string, { totalCount: number; totalCost: number; products: Map<string, { count: number; cost: number }> }>();
 
   let grandTotalCount = 0;
