@@ -58,7 +58,9 @@ async function main(){
   }
 }
 
-main().catch(error => {
-  console.error('Unhandled error during main execution:', error);
-  process.exit(1); // Exit with a failure code for unhandled rejections
-});
+main()
+  .then(() => process.exit(0)) // Explicitly exit with success code
+  .catch(error => {
+    console.error('Unhandled error during main execution:', error);
+    process.exit(1); // Exit with a failure code for unhandled rejections
+  });
