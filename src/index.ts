@@ -15,7 +15,7 @@ async function main(){
     console.error('Please set these variables in your .env file or environment before running the application.');
     process.exit(1);
  }
-  console.log("TESTING ENV LOAD: ", process.env.FTP_HOST);
+  // console.log("TESTING ENV LOAD: ", process.env.FTP_HOST); // Removed as FTP_HOST is not used or validated
 
   const today = new Date();
   const year = today.getFullYear();
@@ -41,21 +41,21 @@ async function main(){
     console.log('Sending email...');
     await emailService.sendReport(filePath, process.env.RECEIVER_EMAIL!);
 
-    // Close the database connection only after all other operations succeed.
-    await dbService.close();
     console.log('Process completed successfully!');
   } catch (error: any) {
     console.error('An error occurred during the process:', error);
     try {
         await emailService.sendError(error);
-        await dbService.close();
     } catch (emailError) {
         console.error('Failed to send error email:', emailError);
-        await dbService.close();
     }
   } finally {
+    // Ensure the database connection is closed in all cases, exactly once.
     await dbService.close();
   }
 }
 
-main();
+main().catch(error => {
+  console.error('Unhandled error during main execution:', error);
+  process.exit(1); // Exit with an error code for unhandled rejections
+});
