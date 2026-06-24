@@ -58,9 +58,10 @@ async function main(){
   }
 }
 
-main()
-  .then(() => process.exit(0)) // Explicitly exit with success code
-  .catch(error => {
-    console.error('Unhandled error during main execution:', error);
-    process.exit(1); // Exit with a failure code for unhandled rejections
-  });
+main().catch(error => {
+  console.error('Unhandled error during main execution:', error);
+  // Set the exit code to 1 to indicate a failure.
+  // The process will exit naturally when the event loop is empty.
+  // This is safer than process.exit(1) because it allows for cleanup.
+  process.exitCode = 1;
+});
