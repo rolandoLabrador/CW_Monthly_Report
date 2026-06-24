@@ -52,10 +52,13 @@ async function main(){
   } finally {
     // Ensure the database connection is closed in all cases, exactly once.
     await dbService.close();
+    // It's also good practice to explicitly close other services if they manage connections.
+    // The @sendgrid/mail library's send method returns a promise that resolves when the API call is complete,
+    // so an explicit close is not necessary here. The await on sendReport/sendError is sufficient.
   }
 }
 
 main().catch(error => {
   console.error('Unhandled error during main execution:', error);
-  process.exit(1); // Exit with an error code for unhandled rejections
+  process.exit(1); // Exit with a failure code for unhandled rejections
 });
