@@ -53,7 +53,7 @@ async function main(){
     await excelService.generateReport(reportData, filePath, discrepancies, pcmiStats);
 
     console.log('Sending email...');
-    await emailService.sendReport(filePath, process.env.RECEIVER_EMAIL!);
+    await emailService.sendReport(filePath, process.env.RECEIVER_EMAIL!, { pcmiStats });
 
     console.log('Process completed successfully!');
   } catch (error: any) {
